@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:pr="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	template="/templates/template.xhtml">
+	<ui:define name="body">
+
+		<form jsf:id="formProdutos" class="form-horizontal" role="form"
+			jsf:prependId="false">
+
+			<pr:dataTable id="produtosDTable" var="produto"
+				value="#{produtosController.produtos}">
+				<pr:column headerText="Nome">
+					<h:outputText value="#{produto.nome}" />
+				</pr:column>
+				<pr:column headerText="Preco">
+					<h:outputText value="#{produto.valor}">
+						<f:convertNumber maxFractionDigits="2" groupingUsed="false" />
+					</h:outputText>
+				</pr:column>
+				<pr:column headerText="Ativo">
+					<h:outputText value="#{produto.ativo}" />
+				</pr:column>
+				<pr:column headerText="Acoes">
+					<pr:commandButton value="Editar"
+						action="#{produtosController.editarProduto(produto)}"
+						update=":form" />
+					<pr:commandButton value="Excluir"
+						action="#{produtosController.excluirProduto(produto)}"
+						update=":form" />
+				</pr:column>
+			</pr:dataTable>
+
+			<br />
+
+			<pr:commandButton value="Adicionar"
+				action="#{produtosController.novo()}" update=":formDialog"
+				oncomplete="PF('modalProduto').show();" />
+
+			<pr:dialog header="Adicionar Produto" widgetVar="modalProduto"
+				modal="true" resizable="false">
+				<h:form id="formDialog">
+					<pr:panelGrid columns="2">
+						<h:outputLabel value="Nome:" />
+						<pr:inputText value="#{produtosController.produto.nome}"
+							required="true" />
+						<h:outputLabel value="Preco:" />
+						<pr:inputText value="#{produtosController.produto.valor}"
+							required="true" />
+					</pr:panelGrid>
+					<pr:commandButton value="Salvar"
+						action="#{produtosController.adicionarProduto()}"
+						update=":mensagens-sistema produtosDTable"
+						oncomplete="PF('modalProduto').hide();" />
+					<pr:commandButton value="Cancelar"
+						onclick="PF('modalProduto').hide();" />
+				</h:form>
+			</pr:dialog>
+		</form>
+	</ui:define>
+</ui:composition>

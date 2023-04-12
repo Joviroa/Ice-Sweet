@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>Configurações do Webapp</display-name>
+  <context-param>
+    <param-name>createTempFiles</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <context-param>
+    <param-name>javax.faces.PROJECT_STAGE</param-name>
+    <param-value>Development</param-value>
+  </context-param>
+  <context-param>
+    <param-name>facelets.SKIP_COMMENTS</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  <error-page>
+    <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+    <location>/templates/menu.xhtml</location>
+  </error-page>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>unprotected-resources</web-resource-name>
+      <url-pattern>*.jsf</url-pattern>
+      <url-pattern>/javax.faces.resource/*</url-pattern>
+      <url-pattern>/rfRes/*</url-pattern>
+      <http-method>HEAD</http-method>
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+      <http-method>PUT</http-method>
+      <http-method>DELETE</http-method>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>livre</web-resource-name>
+      <url-pattern>*.jsf</url-pattern>
+      <url-pattern>/javax.faces.*</url-pattern>
+      <url-pattern>/resources/*</url-pattern>
+      <url-pattern>/templates/*</url-pattern>
+      <url-pattern>/resources</url-pattern>
+      <url-pattern>/javax.faces.resource/*</url-pattern>
+      <url-pattern>/javax.faces.resource/jsf.js.jsf</url-pattern>
+      <url-pattern>/rfRes/*</url-pattern>
+      <http-method>HEAD</http-method>
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+      <http-method>PUT</http-method>
+      <http-method>DELETE</http-method>
+    </web-resource-collection>
+  </security-constraint>
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>/faces/*</url-pattern>
+    <url-pattern>*.jsf</url-pattern>
+    <url-pattern>*.xhtml</url-pattern>
+  </servlet-mapping>
+</web-app>

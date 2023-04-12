@@ -1,0 +1,22 @@
+<jboss-deployment-structure>
+	<deployment>
+		<!-- Dependências -->
+		<dependencies>
+          <module name="javax.ejb.api"/>
+          <module name="javax.persistence.api"/>
+		</dependencies>
+	 </deployment>
+	    <sub-deployment name="ICEJB.jar">
+        <dependencies>
+            <!-- Dependências específicas do EJB -->
+            <module name="org.hibernate"/>
+            <module name="org.jboss.logging"/>
+        </dependencies>
+    </sub-deployment>
+	<sub-deployment name="ICEAPP.war">
+		<dependencies>
+			<!-- Dependências específicas do WAR -->
+	   		<!-- <module name="org.primefaces"/> -->
+    	</dependencies>
+	</sub-deployment>
+</jboss-deployment-structure>
