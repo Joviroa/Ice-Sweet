@@ -1,4 +1,4 @@
-# Ice-Sweet
+# :ice_cream: Ice-Sweet :ice_cream:
 Sistema de uma sorveteria fictícia chamada Ice Sweet.
 
 ## Tecnologias
