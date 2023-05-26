@@ -1,0 +1,228 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:pr="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	template="/templates/template.xhtml">
+	<ui:define name="body">
+
+		<h:form id="formComandas" class="form-horizontal" role="form" prependId="false">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h1 style="text-align:center">Comandas</h1>
+				</div>
+				<hr/>
+				<div class="panel-body">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+						
+						</div>
+						<div class="panel-body">
+						
+							<ui:repeat value="#{comandaController.listaComandas}" var="comanda">
+								<pr:card style="width: 20em">
+									<f:facet name="title">
+										Comanda #{comanda.numero}
+									</f:facet>
+									<div class="row" jsf:rendered="#{comanda.comandaAtiva()}">
+										<div class="col col-md-8">
+											<p>Cliente: #{comandaController.nomeCliente(comanda)}</p>
+										</div>
+										<div class="col col-md-2">
+											<pr:tag styleClass="mr-2" severity="success" value="Cadastrado" rendered="#{comanda.clienteCadastrado()}"></pr:tag>
+										</div>
+									</div>
+									<div class="row" jsf:rendered="#{comanda.comandaAtiva()}">
+										<p>
+											<h:outputLabel for="@next" value="Valor Total:&#160;" styleClass="text-bold" />
+											<h:outputText value="#{comanda.valorTotal}" converter="moedaConverter"/>
+										</p>
+									</div>
+									<f:facet name="footer">
+										<div class="row">
+											<div class="col col-md-6" jsf:rendered="#{!comanda.comandaAtiva()}">
+												<pr:commandButton icon="pi pi-plus" value="Novo"
+													action="#{comandaController.novoClienteComanda(comanda)}"
+													oncomplete="$('#modalComanda').modal('show');" update="formModal"
+													styleClass="ui-button-success"/>
+											</div>
+											<div class="col col-md-6" jsf:rendered="#{comanda.comandaAtiva()}">
+												<pr:commandButton icon="pi pi-plus" value="Editar"
+													action="#{comandaController.editarClienteComanda(comanda)}"
+													oncomplete="$('#modalComanda').modal('show');" update="formModal"
+													styleClass="ui-button-warning "/>
+											</div>
+											<div class="col col-md-6">
+												<pr:commandButton icon="pi pi-book" value="Finalizar" rendered="#{comanda.comandaAtiva()}"
+													action="#{comandaController.visualizarComanda(comanda)}" update="formModal"
+													oncomplete="PF('dialogFinalizarComanda').show();"
+													styleClass="ui-button-danger"/>
+											</div>
+										</div>
+									</f:facet>
+								</pr:card>
+							</ui:repeat> 
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+		<h:form id="formModal" class="form-horizontal" role="form" prependId="false">
+		
+			<pr:dialog header="Finalizar Comanda #{comandaController.comanda.numero}" widgetVar="dialogFinalizarComanda" modal="true" resizable="false" width="450" height="200">
+				<div class="panel panel-primary">
+					<!-- <div class="panel-heading">
+						<h5>Informações</h5>
+					</div> -->
+					<div class="panel-body">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<strong style="margin-right:5px">
+									<h:outputLabel for="numeroMesaModal" value="Número Mesa:"/>
+								</strong>
+								<h:outputText id="numeroMesaModal" value="#{comandaController.comanda.numero}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-8">
+								<strong style="margin-right:5px">
+									<h:outputLabel value="Cliente:" />
+								</strong>
+								<h:outputText value="#{comandaController.comanda.cliente.nome}" rendered="#{comandaController.comanda.clienteCadastrado()}"/>
+								<h:outputText value="#{comandaController.comanda.nomeCliente}" rendered="#{!comandaController.comanda.clienteCadastrado() and !comandaController.comanda.nomeCliente.blank}"/>
+								<h:outputText value="Não Informado" rendered="#{!comandaController.comanda.clienteCadastrado() and comandaController.comanda.nomeCliente.blank}"/>
+							</div>
+							<div class="col-md-3">
+								<pr:tag styleClass="mr-2" severity="success" value="Cadastrado" rendered="#{comandaController.comanda.clienteCadastrado()}"></pr:tag>
+							</div>
+						</div> 
+						<pr:divider/>
+						<div class="row">
+							<div class="col-md-12">
+								<strong style="margin-right:5px">
+									<h:outputLabel  value="Subtotal:"/>
+								</strong>
+								<h:outputText  value="R$ #{comandaController.comanda.valorTotal}" />
+							</div>
+						</div>
+						<div class="row" jsf:rendered="#{comandaController.exibeBtnUsarCupom()}">
+							<div class="col-md-6">
+								<strong style="margin-right:5px">
+									<h:outputLabel for="valorDescontoCupomInfoModal" value="Desconto Cupom:" />
+								</strong>
+								<h:outputText id="valorDescontoCupomInfoModal" value="R$ #{comandaController.comanda.cliente.saldoCupom}" />
+							</div>
+							<div class="col-md-6">
+								<strong><pr:outputLabel for="@next" value="Usar Cupom?"/></strong>
+								<pr:selectBooleanCheckbox value="#{comandaController.usarCupomFinalizarComanda}" style="margin-left: 1em">
+						            <pr:ajax update="totalFinalizarComandaDialog"/>
+						        </pr:selectBooleanCheckbox>
+							</div>
+						</div>
+						<div class="row" jsf:id="totalFinalizarComandaDialog">
+							<div class="col">
+								<strong style="margin-right:5px">
+									<h:outputLabel value="Total:" />
+								</strong>
+								<h:outputText value="R$ #{comandaController.calcularValorTotalComanda()}" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<f:facet name="footer">
+				<!-- 	<pr:commandButton rendered="#{not comandaController.comanda.status.isAtivo()}"
+						type="button" value="Salvar" update="mensagens-sistema formComandas formModal"
+						oncomplete="PF('dialogFinalizarComanda').hide();" styleClass="ui-button-primary">
+							<pr:ajax update="formComandas formModal" listener="#{comandaController.salvarComanda()}" execute="modalComanda"/>	
+					</pr:commandButton> -->
+					
+					<pr:commandButton rendered="#{comandaController.comanda.status.isAtivo()}"
+						type="button" value="Finalizar" update="mensagens-sistema formComandas formModal"
+						oncomplete="PF('dialogFinalizarComanda').hide();" styleClass="ui-button-danger">
+							<pr:ajax update="formComandas formModal" listener="#{comandaController.finalizarComanda()}" execute="dialogFinalizarComanda"/>	
+					</pr:commandButton>
+				</f:facet>
+			</pr:dialog>
+
+			
+			
+			<!-- Inicio - Modal Comandas -->
+					<div class="modal fade" jsf:id="modalComanda" tabindex="-1" role="dialog" aria-labelledby="modalComanda" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title" id="myModalLabel">
+									#{comandaController.tituloModalComanda()} Comanda #{comandaController.comanda.numero}</h4>
+									<button type="button" class="close" onclick="$('#modalComanda').modal('hide');" data-dismiss="modal">
+										<span aria-hidden="true">&#215;</span><span class="sr-only">Close</span>
+									</button>
+								</div>
+								
+								<div class="card-body">
+									<div class="panel panel-info">
+										<div class="card-text">
+
+											<div class="form-group" style="margin: 0 1em 0 1em">
+												<div class="row" jsf:rendered="#{comandaController.inserirDadosComanda}">
+													<div class="col-sm-6">
+														<strong><pr:outputLabel for="@next" value="Cliente Cadastrado?"/></strong>
+														<pr:selectBooleanCheckbox value="#{comandaController.comandaClienteCadastrado}" style="margin-left: 1em">
+												            <pr:ajax update="clienteAddModal" listener="#{comandaController.setarClienteComanda()}"/>
+												        </pr:selectBooleanCheckbox>
+													</div>
+												</div>
+												<div class="row">
+													<div jsf:id="clienteAddModal">
+														<div class="col" jsf:rendered="#{!comandaController.comandaClienteCadastrado}">
+															<strong>Nome Cliente:</strong>
+															<input type="text" class="form-control" onkeypress="return somenteLetras(event);" placeholder="Nome do cliente não cadastrado" maxlength="50"
+																jsf:value="#{comandaController.comanda.nomeCliente}"/>
+														</div>
+														<div class="col" jsf:rendered="#{comandaController.comandaClienteCadastrado}">
+															<strong>CPF:</strong>
+															<input type="text" class="form-control" onkeypress="return somenteNumero(event);" placeholder="CPF do cliente cadastrado" maxlength="11" 
+																jsf:value="#{comandaController.comanda.cliente.cpf}" />
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-12">
+														<strong>Valor Total*:</strong>
+														<input type="text" class="form-control" jsf:value="#{comandaController.comanda.valorTotal}"/>
+														<!-- <pr:inputNumber value="#{comandaController.comanda.valorTotal}" lang="pt"/> -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="modal-footer">
+									<div class="pull-right">
+										<h:commandButton id="fecharModal" styleClass="btn btn-secondary" value="Fechar" onclick="$('#modalComanda').modal('hide');">
+											<f:ajax event="click" render="mensagens-sistema formComandas formModal" listener="#{comandaController.fecharModal}"/>
+										</h:commandButton>
+									</div>
+									<div class="pull-right">
+										<h:commandButton id="salvarModal" styleClass="btn btn-success" value="Salvar Comanda" onclick="$('#modalComanda').modal('hide');PF('statusDialog').show();" oncomplete="PF('statusDialog').hide())">
+											<f:ajax event="click" render="mensagens-sistema formComandas formModal" listener="#{comandaController.salvarComanda}" execute="modalComanda"/>
+										</h:commandButton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+			<!-- Fim - Modal Comandas -->
+			
+			
+			
+			
+			
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+	

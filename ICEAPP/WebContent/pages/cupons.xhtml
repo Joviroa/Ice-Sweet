@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:pr="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/templates/template.xhtml">
+	<ui:define name="body">
+	
+		<h:form id="formCupons" class="form-horizontal" role="form" prependId="false">
+			<div class="card">
+				<pr:dataTable var="cupomI" value="#{cupomController.listaCupons}">
+					
+					<f:facet name="header">
+						<div class="row">
+							<div class="col-md-9">
+							 	<h3>Cupons</h3>
+							</div>
+							<div class="col-md-3">
+								<pr:commandButton icon="pi pi-plus" 
+									value="Adicionar"
+									update="formModal"
+									styleClass="rounded-button ui-button-success" 
+									oncomplete="$('#modalCupom').modal('show');"
+									action="#{cupomController.redefinirCupomModal()}" />
+							</div>
+						</div>
+			        </f:facet>
+
+					<pr:column headerText="Data Início">
+						<h:outputText value="#{cupomI.dataInicio}" converter="dataConverter" />
+					</pr:column>
+
+					<pr:column headerText="Data Fim">
+						<h:outputText value="#{cupomI.dataFim}" converter="dataConverter" />
+					</pr:column>
+					
+					<pr:column headerText="Valor Elegível">
+						<h:outputText value="#{cupomI.valorElegivel}" converter="moedaConverter" />
+					</pr:column>
+					
+					<pr:column headerText="Desconto">
+						<h:outputText value="#{cupomI.valorDesconto}" converter="moedaConverter" />
+					</pr:column>
+					
+					<pr:column headerText="Ativo">
+						<pr:toggleSwitch value="#{cupomI.ativo}" onIcon="pi pi-times" offIcon="pi pi-check">
+							<pr:ajax listener="#{cupomController.desativarOutrosCupons(cupomI)}" update="formCupons"/>
+						</pr:toggleSwitch>
+					</pr:column>
+					
+					<pr:column headerText="Acoes">
+						<pr:commandButton icon="pi pi-pencil" styleClass="rounded-button ui-button-warning"
+							 action="#{cupomController.carregarCupomModalEditar(cupomI)}"
+							 oncomplete="$('#modalCupom').modal('show');"
+							 update="formModal" />
+						<pr:commandButton id="btnExluirCliente" icon="pi pi-trash" styleClass="rounded-button ui-button-danger">
+							<pr:ajax listener="#{cupomController.excluirCupom(cupomI)}" update="formCupons formModal"/> 
+						</pr:commandButton>
+					</pr:column>
+					
+					<f:facet name="footer">
+			            <span class="font-bold">São no total #{fn:length(cupomController.listaCupons)} cupons.</span>
+			        </f:facet>
+					
+				</pr:dataTable>
+			</div>
+		</h:form>
+		<h:form id="formModal" class="form-horizontal" role="form" prependId="false">
+			
+			<!-- Inicio - Modal Clientes -->
+			<div class="modal fade" jsf:id="modalCupom" tabindex="-1" role="dialog" aria-labelledby="modalCupom" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" id="myModalLabel"> Modal Cupom</h4>
+							<button type="button" class="close" onclick="$('#modalCupom').modal('hide');" data-dismiss="modal">
+								<span aria-hidden="true">&#215;</span><span class="sr-only">Close</span>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="card-text">
+								<div class="form-group" style="margin: 0 1em 0 1em">
+									<div class="row">
+										<div class="col-md-6">
+											<strong>Data Início*:</strong>
+											<pr:datePicker value="#{cupomController.cupom.dataInicio}" showButtonBar="true" locale="pt_BR"/>
+										</div>
+										<div class="col-md-6">
+											<strong>Data Fim:</strong> 
+											<pr:datePicker value="#{cupomController.cupom.dataFim}" showButtonBar="true" locale="pt_BR"/>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<strong>Valor Elegível*:</strong> <input type="text"
+												class="form-control" placeholder="Valor necessário pra ganhar o desconto."
+												jsf:value="#{cupomController.cupom.valorElegivel}" jsf:converter="moedaConverter" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<strong>Valor Desconto*:</strong> <input type="text"
+												class="form-control" placeholder="Valor do desconto."
+												jsf:value="#{cupomController.cupom.valorDesconto}" jsf:converter="moedaConverter"/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<div class="pull-right">
+								<h:commandButton id="fecharModal" styleClass="btn btn-secondary" action="#{cupomController.redefinirCupomModal()}" 
+								value="Fechar" onclick="$('#modalCupom').modal('hide');">
+								<f:ajax event="click" update="mensagens-sistema formCupons formModal" listener="#{cupomController.redefinirCupomModal()}"/>
+								</h:commandButton> 
+							</div>
+							<div class="pull-right">
+								<h:commandButton id="salvarModal" action="#{cupomController.salvarCupom()}"
+									styleClass="btn btn-success" value="Salvar Cupom" 
+									onclick="$('#modalCupom').modal('hide');PF('statusDialog').show();" oncomplete="PF('statusDialog').hide())">
+									<f:ajax event="click" update="mensagens-sistema formCupons formModal" listener="#{cupomController.salvarCupom()}" execute="formModal"/> 
+								</h:commandButton>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Fim - Modal Cupons -->
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+	

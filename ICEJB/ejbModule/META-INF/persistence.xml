@@ -3,10 +3,14 @@
 <persistence-unit name="icedb">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:jboss/datasources/icedbDatasource</jta-data-source>
+		<class>ejb.icesweet.entidade.Cupom</class>
+		<class>ejb.icesweet.entidade.Comanda</class>
+		<class>ejb.icesweet.entidade.Cliente</class>
+		<class>ejb.icesweet.entidade.Status</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
-			<property name="hibernate.format_sql" value="true" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.defaultAutoCommit" value="false" />
 			<property name="hibernate.temp.use_jdbc_metadata_defaults" value="false" />
 		</properties>

@@ -23,26 +23,120 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Muli:400,300" rel="stylesheet" type="text/css"/>
     
+ <!--    <h:outputScript library="js" name="funcoesJs.js" /> -->
+    <script type="text/javascript" src="/JavaServerFaces/faces/javax.faces.resource/js/funcoesJs.js?ln=js"/>
+    
+    <script>
+    PrimeFaces.locales['pt_BR'] = {
+    	    closeText: 'Fechar',
+    	    prevText: 'Anterior',
+    	    nextText: 'Próximo',
+    	    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    	    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    	    dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+    	    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    	    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+    	    weekHeader: 'Semana',
+    	    firstDay: 1,
+    	    isRTL: false,
+    	    showMonthAfterYear: false,
+    	    yearSuffix: '',
+    	    timeOnlyTitle: 'Apenas Horas',
+    	    timeText: 'Tempo',
+    	    hourText: 'Hora',
+    	    minuteText: 'Minuto',
+    	    secondText: 'Segundo',
+    	    currentText: 'Hoje',
+    	    ampm: false,
+    	    month: 'Mês',
+    	    week: 'Semana',
+    	    day: 'Dia',
+    	    allDayText: 'Todo o Dia',
+    	    today: 'Hoje',
+    	    clear: 'Limpar'
+    	};
+    			
+    </script>
+    
+    
 	<style>
 	.form-control { background: #fff; border:1px solid #9a9a9a; }
-	#pagina {
-		background: yellow;
-		border: 1px solid gray;
-		margin-top: 100px;
+	
+	.divIce { 
+		background: #fff;
+		border:1px solid #9a9a9a;
 	}
+	
+	.menu{
+		padding-bottom: 20px !important;
+	}
+	
+	.menu.row{
+		margin-right: 0px !important;
+		margin-left: 0px !important;
+	}
+	
+	body{
+		background: #43a79d;
+	}
+	
+	.botaoMenu{
+		margin:3px auto;
+		background: #5e288fc7 !important;
+		border: 1px solid #0a7242 !important;
+	}
+	.opcaoMenu{
+		margin:4px auto;
+	}
+	
+	
+	#pagina {
+		/* background: #DBDFEA;
+		border: 1px solid gray;
+		padding: 30px 0px; */
+		margin-top: 50px;
+	}
+	.ui-card{
+		margin: 10px;
+		display: inline-block;
+	}
+	
+	#imgMenu{
+	    width: 150px;
+    	height: 120px;
+    	margin: 15px auto;
+	}
+	
+	.ui-datepicker {
+	  z-index: 9999 !important;
+	}
+	
+	
 	</style>
 </h:head>
 
 <h:body>
 	<div id="pagina" class="container">
 		<div class="row">
-			<pr:graphicImage name="resources/img/icon.png" library="img"/>
-		</div>
-		<div class="row">
-			<div class="col-md-3">
-				<ui:include src="/templates/menu.xhtml" />
+			<div class="col-md-2 divIce menu">
+				<h:form id="formMenuTemplate" role="form" prependId="false">
+					<div class="row">
+						<pr:graphicImage id="imgMenu" name="icon.png" library="img"/>
+					</div>
+					<div class="row">
+						<div class="row opcaoMenu">
+							<pr:commandButton value="Comandas" icon="pi pi-book" action="#{baseController.redirecionarComandas()}" class="botaoMenu"/>
+						</div>
+						<div class="row opcaoMenu">
+							<pr:commandButton value="Clientes" icon="pi pi-user" action="#{baseController.redirecionarCliente()}" class="botaoMenu"/>
+						</div>
+						<div class="row opcaoMenu">
+							<pr:commandButton value="Cupons" icon="pi pi-ticket" action="#{baseController.redirecionarCupons()}" class="botaoMenu"/>
+						</div>
+					</div>
+				</h:form>
 			</div>
-			<div class="col-md-9">
+			<div class="col-md-10 divIce" style="padding: 10px;">
     			<ui:insert name="body"/>
 			</div>
 		</div>

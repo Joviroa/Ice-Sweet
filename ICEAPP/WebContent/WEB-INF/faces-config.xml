@@ -14,4 +14,13 @@
 		</resource-bundle>
 	</application> -->
 
+	<converter>
+    	<converter-id>moedaConverter</converter-id>
+    	<converter-class>utils.MoedaConverter</converter-class>
+	</converter>
+	<converter>
+    	<converter-id>dataConverter</converter-id>
+    	<converter-class>utils.DataConverter</converter-class>
+	</converter>
+	
 </faces-config>

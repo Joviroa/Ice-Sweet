@@ -4,6 +4,7 @@
 		<dependencies>
           <module name="javax.ejb.api"/>
           <module name="javax.persistence.api"/>
+          
 		</dependencies>
 	 </deployment>
 	    <sub-deployment name="ICEJB.jar">
@@ -16,7 +17,7 @@
 	<sub-deployment name="ICEAPP.war">
 		<dependencies>
 			<!-- Dependências específicas do WAR -->
-	   		<!-- <module name="org.primefaces"/> -->
+	   		<module name="org.primefaces" slot="main" export="true"/>
     	</dependencies>
 	</sub-deployment>
 </jboss-deployment-structure>

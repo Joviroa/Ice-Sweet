@@ -1,4 +1,4 @@
-package controller.produto;
+package controllers;
 
 import java.util.List;
 
@@ -7,10 +7,9 @@ import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
-import controller.BaseController;
 import ejb.icesweet.bo.ProdutoBO;
 import ejb.icesweet.entidade.Produto;
-import web.exception.ICException;
+import exceptions.ICException;
 
 @SuppressWarnings("serial")
 @Named
