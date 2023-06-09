@@ -49,6 +49,9 @@ public class ComandaController extends BaseController{
 	}
 	
 	public void editarClienteComanda(Comanda comanda) {
+		if(comanda.getCliente().getId() != null) {
+			setComandaClienteCadastrado(Boolean.TRUE);
+		}
 		setEditarDadosComanda(Boolean.TRUE);
 		setInserirDadosComanda(Boolean.FALSE);
 		setComanda(comanda);
@@ -75,6 +78,7 @@ public class ComandaController extends BaseController{
 			System.out.println("Comanda salva com sucesso.");
 			fecharModal();
 			inicializarComandas();
+			inicializarBooleansTela();
 		}catch(ICException ex) {
 			System.out.println(ex.getListaErros());
 		}finally {

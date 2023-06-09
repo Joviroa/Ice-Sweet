@@ -24,7 +24,7 @@
 									update="formModal"
 									styleClass="rounded-button ui-button-success" 
 									oncomplete="$('#modalCliente').modal('show');"
-									action="#{clienteController.carregarNovoClienteAux()}" />
+									action="#{clienteController.carregarNovoClienteAux()}"/>
 							</div>
 						</div>
 			        </f:facet>
@@ -117,10 +117,13 @@
 								</h:commandButton> 
 							</div>
 							<div class="pull-right">
+								<!-- <pr:commandButton id="salvarModal" styleClass="btn btn-success">
+									<pr:ajax listener="#{clienteController.salvarCliente()}" update="mensagens-sistema formClientes formModal"/> 
+								</pr:commandButton> -->
 								<h:commandButton id="salvarModal" action="#{clienteController.salvarCliente()}"
 									styleClass="btn btn-success" value="Salvar Cliente" 
 									onclick="$('#modalCliente').modal('hide');PF('statusDialog').show();" oncomplete="PF('statusDialog').hide())">
-									<f:ajax event="click" update="mensagens-sistema formClientes formModal" listener="#{clienteController.salvarCliente()}" execute="formModal"/> 
+									<f:ajax event="click" render="formClientes" update="mensagens-sistema formClientes formModal" listener="#{clienteController.salvarCliente()}" execute="formModal"/> 
 								</h:commandButton>
 							</div>
 						</div>

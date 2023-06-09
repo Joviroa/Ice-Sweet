@@ -11,13 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-@SequenceGenerator(name="icesweet.sequence_cupom",sequenceName="sequence_cupom", allocationSize=1)
 @Table(schema="icesweet", name="cupom")
 @Entity
 public class Cupom implements Entidade{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="icesweet.sequence_cupom")
+	@SequenceGenerator(name="icesweet.sequence_cupom", sequenceName="icesweet.sequence_cupom", allocationSize=1)
 	@Column(name="id_cupom")
 	private Long id;
 	

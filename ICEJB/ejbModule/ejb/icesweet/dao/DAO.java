@@ -10,13 +10,15 @@ import javax.persistence.PersistenceException;
 public abstract class DAO {
 	
 	private static EntityManagerFactory emf;
+	private static EntityManager em;
 
-	public static EntityManager getEntityManager() {
-		if(emf == null) {
-			emf = Persistence.createEntityManagerFactory("icedb");
-		}
-		return emf.createEntityManager();
-	}
+	 public static EntityManager getEntityManager() {
+	        if (em == null) {
+	            emf = Persistence.createEntityManagerFactory("icedb");
+	            em = emf.createEntityManager();
+	        }
+	        return em;
+	 }
 
 	public <T> T busca(Class<T> classe, Object id) {
 		return getEntityManager().find(classe, id);

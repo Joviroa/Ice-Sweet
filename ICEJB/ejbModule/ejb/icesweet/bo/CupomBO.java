@@ -12,7 +12,7 @@ import ejb.icesweet.entidade.Cupom;
 public class CupomBO {
 	@EJB
 	private CupomDAO cupomDAO;
-	
+
 	public Cupom buscarCupomAtivo() {
 		return cupomDAO.buscarCupomAtivo();
 	}
@@ -22,13 +22,13 @@ public class CupomBO {
 	}
 
 	public void excluirCupom(Cupom cupom) {
-		cupomDAO.remove(cupom);
+		cupomDAO.removerCupom(cupom);
 	}
 
 	public void salvarCupom(Cupom cupom) {
-		if(cupom.getId() == null) {
+		if (cupom.getId() == null) {
 			cupomDAO.persiste(cupom);
-		}else {
+		} else {
 			cupomDAO.atualiza(cupom);
 		}
 	}

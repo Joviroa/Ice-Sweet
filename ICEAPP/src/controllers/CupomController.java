@@ -10,6 +10,7 @@ import javax.inject.Named;
 import ejb.icesweet.bo.CupomBO;
 import ejb.icesweet.entidade.Cupom;
 import exceptions.ICException;
+import utils.DataUtils;
 
 @SuppressWarnings("serial")
 @ViewScoped
@@ -31,14 +32,31 @@ public class CupomController extends BaseController{
 	}
 	
 	public void salvarCupom() {
+		try{
 		cupomBO.salvarCupom(getCupom());
+		inicializarCupons();
+		redefinirCupomModal();
+		System.out.println("Cupom adicionado com sucesso.");
+		}catch(Exception ex) {
+			
+		}finally {
+			fechaStatusDialog();
+		}
 	}
 	
 	public void desativarOutrosCupons(Cupom cupom) {
-		for(Cupom cupomAux: getListaCupons()){
-			if(!cupomAux.equals(cupom)) {
-				cupomAux.setAtivo(Boolean.FALSE);
+		try {
+			for (Cupom cupomAux : getListaCupons()) {
+				if (!cupomAux.equals(cupom)) {
+					cupomAux.setAtivo(Boolean.FALSE);
+					cupomBO.salvarCupom(cupomAux);
+				}
 			}
+			inicializarCupons();
+		} catch (Exception ex) {
+
+		} finally {
+			fechaStatusDialog();
 		}
 	}
 	
@@ -47,12 +65,42 @@ public class CupomController extends BaseController{
 		setEditarCupom(Boolean.TRUE);
 	}
 	
+	public void validarCupom() throws ICException {
+		ICException ex = new ICException();
+		ex.instanciaListaErros();
+		
+		if(getCupom().getDataInicio() == null) {
+			ex.adicionarErroLista("A data de início do cupom é obrigatória, preencha para prosseguir.");
+		}else {
+			if(DataUtils.verificarDataDepoisDe(getCupom().getDataInicio(), getCupom().getDataFim())) {
+				ex.adicionarErroLista("A data de início deve ser anterior ou igual a data de fim.");
+			}
+		}
+		
+		if(getCupom().getDataFim() == null) {
+			ex.adicionarErroLista("A data de fim do cupom é obrigatória, preencha para prosseguir.");
+		}else {
+			if(DataUtils.verificarDataDepoisDe(getCupom().getDataFim(), getCupom().getDataInicio())) {
+				ex.adicionarErroLista("A data de fim deve ser posterior ou igual data de início.");
+			}
+		}
+		
+		if(getCupom().getValorDesconto() == null) {
+			ex.adicionarErroLista("O valor de desconto do cupom é obrigatório, preencha para prosseguir.");
+		}
+		
+		if(!ex.getListaErros().isEmpty()) {
+			throw ex;
+		}
+	}
+	
 	public void excluirCupom(Cupom cupom) {
 		try {
 			cupomBO.excluirCupom(cupom);
+			inicializarCupons();
 			System.out.println("Cupom removido com sucesso.");
 		}catch(Exception ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}finally {
 			fechaStatusDialog();
 		}
@@ -64,7 +112,6 @@ public class CupomController extends BaseController{
 	
 	private void inicializarBooleans() {
 		setEditarCupom(Boolean.FALSE);
-		
 	}
 
 	private void inicializarCupons() {
@@ -94,6 +141,5 @@ public class CupomController extends BaseController{
 	public void setEditarCupom(Boolean editarCupom) {
 		this.editarCupom = editarCupom;
 	}
-	
 	
 }

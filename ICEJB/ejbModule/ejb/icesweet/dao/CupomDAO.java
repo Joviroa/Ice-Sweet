@@ -22,10 +22,13 @@ public class CupomDAO extends DAO {
 	private String queryBuscarCupomAtivo() {
 		String query = "SELECT cupom "
 				+ "FROM Cupom cupom "
-				+ "WHERE 1=1";
-//				+ "WHERE cupom.data_inicio < now()"
-//				+ "AND cupom.data_fim is NULL";
+				+ "WHERE cupom.ativo = true";
 		return query;
+	}
+	
+	public void removerCupom(Cupom cupom) {
+		Cupom aux = busca(cupom.getClass(), cupom.getId());
+		remove(aux);
 	}
 	
 //	private void inicializaGrafo(Cupom cupom) {

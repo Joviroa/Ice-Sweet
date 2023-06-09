@@ -183,15 +183,16 @@
 														</div>
 														<div class="col" jsf:rendered="#{comandaController.comandaClienteCadastrado}">
 															<strong>CPF:</strong>
-															<input type="text" class="form-control" onkeypress="return somenteNumero(event);" placeholder="CPF do cliente cadastrado" maxlength="11" 
-																jsf:value="#{comandaController.comanda.cliente.cpf}" />
+															<input type="text" class="form-control" onkeypress="return somenteNumero(event);" 
+																placeholder="CPF do cliente cadastrado" maxlength="11"
+																jsf:value="#{comandaController.comanda.cliente.cpf}" jsf:disabled="#{comandaController.editarDadosComanda}" />
 														</div>
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-md-12">
 														<strong>Valor Total*:</strong>
-														<input type="text" class="form-control" jsf:value="#{comandaController.comanda.valorTotal}"/>
+														<input type="text" class="form-control" jsf:value="#{comandaController.comanda.valorTotal}" jsf:converter="moedaConverter"/>
 														<!-- <pr:inputNumber value="#{comandaController.comanda.valorTotal}" lang="pt"/> -->
 													</div>
 												</div>
