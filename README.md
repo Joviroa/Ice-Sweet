@@ -2,7 +2,7 @@
 Sistema de uma sorveteria fictícia chamada Ice Sweet.
 
 ## Tecnologias
-* Java 11
+* Java 8
 * JSF 2.2
 * Primefaces 12
 * EJB
