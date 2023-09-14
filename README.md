@@ -1,5 +1,5 @@
 # :ice_cream: Ice-Sweet :ice_cream:
-Sistema de uma sorveteria fictícia chamada Ice Sweet.
+Sistema de uma sorveteria fictícia chamada Ice Sweet feita para a dissciplina Projeto Integrado Web.
 
 ## Tecnologias
 * Java 8
